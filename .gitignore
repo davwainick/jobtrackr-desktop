@@ -45,6 +45,11 @@ jobtrackr.db
 *.swo
 *~
 
+# --- Emacs ---
+\#*\#
+.\#*
+*.elc
+
 # --- OS cruft ---
 .DS_Store
 Thumbs.db
