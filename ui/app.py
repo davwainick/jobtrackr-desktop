@@ -97,7 +97,7 @@ class JobTrackrApp:
             btn.pack(fill="x", padx=10, pady=2)
 
         # Spacer
-        ttk.Frame(sidebar).pack(fill="both", expand=True)
+        ttk.Frame(sidebar, style="secondary.TFrame").pack(fill="both", expand=True)
 
         # Settings + data location
         ttk.Separator(sidebar).pack(fill="x", padx=10, pady=5)
