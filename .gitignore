@@ -54,3 +54,7 @@ jobtrackr.db
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# --- Claude Code files ---
+CLAUDE.md
+.claude/

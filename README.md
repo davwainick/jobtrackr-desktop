@@ -47,6 +47,15 @@ pip install -r requirements.txt
 python main.py
 ```
 
+## Tests
+
+The model layer (schema, CRUD, dashboard queries, CSV export) is covered by unit
+tests that run headless against an in-memory SQLite database — no display required:
+
+```bash
+python -m unittest discover -s tests
+```
+
 ## Building Executables
 
 Build on each target platform natively (cross-compilation isn't supported by PyInstaller):
@@ -98,9 +107,12 @@ jobtrackr-desktop/
 ├── ui/
 │   ├── app.py           # Main window, sidebar, all views
 │   └── widgets.py       # Reusable form/table/detail widgets
-└── export/
-    ├── csv_export.py    # CSV generation
-    └── markdown_export.py   # Gap Analysis markdown export
+├── export/
+│   ├── csv_export.py    # CSV generation
+│   └── markdown_export.py   # Gap Analysis markdown export
+└── tests/
+    ├── test_database.py     # Model-layer CRUD / query tests
+    └── test_csv_export.py   # CSV export tests
 ```
 
 ## Architecture

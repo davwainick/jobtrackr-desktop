@@ -384,6 +384,16 @@ class DetailView(ttk.Frame):
 
         canvas.bind_all("<MouseWheel>", _on_mousewheel)
 
+        # The wheel handler is global (bind_all); drop it when this view is
+        # destroyed so it can't fire against a dead canvas after a view switch.
+        # Guard on `event.widget is self` so child destroys (clear_content)
+        # don't tear the binding down while the view is still alive.
+        def _on_destroy(event: tk.Event) -> None:
+            if event.widget is self:
+                canvas.unbind_all("<MouseWheel>")
+
+        self.bind("<Destroy>", _on_destroy)
+
     def clear_content(self) -> None:
         for w in self.content.winfo_children():
             w.destroy()

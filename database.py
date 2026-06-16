@@ -3,7 +3,7 @@
 import sqlite3
 import os
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Optional
 
@@ -25,7 +25,9 @@ def new_id() -> str:
 
 
 def now_iso() -> str:
-    return datetime.utcnow().isoformat(timespec="seconds")
+    # Naive UTC timestamp (no offset suffix) to keep the stored format
+    # identical to existing rows so lexical ORDER BY stays consistent.
+    return datetime.now(timezone.utc).replace(tzinfo=None).isoformat(timespec="seconds")
 
 
 SCHEMA_SQL = """
@@ -536,7 +538,7 @@ class Database:
     # ── Dashboard Queries ────────────────────────────────────────────
 
     def get_counts(self) -> dict[str, int]:
-        today = datetime.utcnow().strftime("%Y-%m-01")
+        today = datetime.now(timezone.utc).strftime("%Y-%m-01")
         return {
             "companies": self.conn.execute("SELECT COUNT(*) FROM companies").fetchone()[0],
             "job_postings": self.conn.execute("SELECT COUNT(*) FROM job_postings").fetchone()[0],
@@ -547,7 +549,7 @@ class Database:
         }
 
     def get_due_items(self) -> list[dict[str, Any]]:
-        today = datetime.utcnow().strftime("%Y-%m-%d")
+        today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
         items: list[dict[str, Any]] = []
         for row in self.conn.execute(
             "SELECT id, company_name AS name, next_action AS action, due_date FROM companies WHERE due_date <= ? AND due_date IS NOT NULL",
